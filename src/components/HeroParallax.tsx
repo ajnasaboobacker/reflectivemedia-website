@@ -22,7 +22,7 @@ export default function HeroParallax() {
     for (let i = 1; i <= totalFrames; i++) {
       const img = new Image();
       const frameNum = String(i).padStart(3, "0");
-      img.src = `/assets/RM_Video_Frames/ezgif-frame-${frameNum}.jpg`;
+      img.src = `/assets/RM_Video_Frames/ezgif-frame-${frameNum}.png`;
       img.onload = () => {
         loadedCount++;
         setLoadingProgress(Math.round((loadedCount / totalFrames) * 100));
