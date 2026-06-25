@@ -48,8 +48,8 @@ export default function HeroParallax() {
 
   // Preload sliding window of images around current frame to prevent flickering
   const preloadWindow = useCallback((currentIndex: number) => {
-    const bufferAhead = 15;
-    const bufferBehind = 5;
+    const bufferAhead = 25; // ponytail: increased from 15 to prefetch more frames ahead aggressively
+    const bufferBehind = 8; // ponytail: increased from 5 to prefetch more frames behind
     
     for (let i = currentIndex - bufferBehind; i <= currentIndex + bufferAhead; i++) {
       if (i >= 0 && i < totalFrames) {
@@ -76,7 +76,7 @@ export default function HeroParallax() {
     return null;
   }, []);
 
-  // Preload initial frames and keyframes in background
+  // Preload initial frames, then sequentially load all remaining frames in the background
   useEffect(() => {
     // Initialize images container
     imagesRef.current = new Array(totalFrames).fill(null);
@@ -95,15 +95,35 @@ export default function HeroParallax() {
       });
     }
 
-    // Load sparse keyframes (every 8th frame) in background to serve as fast-scroll fallbacks
-    const timeoutId = setTimeout(() => {
-      const step = 8;
-      for (let i = criticalToLoad + 1; i <= totalFrames; i += step) {
-        loadFrame(i);
-      }
-    }, 500);
+    // Sequentially preload all remaining frames in the background one-by-one to avoid clogging the network
+    let isCancelled = false;
 
-    return () => clearTimeout(timeoutId);
+    const preloadAllRemaining = async () => {
+      // Small timeout to let critical page assets load first
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (isCancelled) return;
+
+      for (let i = 1; i <= totalFrames; i++) {
+        if (isCancelled) break;
+
+        // Skip if already loaded or loading
+        if (imagesRef.current[i - 1]) continue;
+
+        // Load the frame and wait for it to load before starting the next one
+        await new Promise<void>((resolve) => {
+          const img = loadFrame(i, () => {
+            resolve();
+          });
+          img.onerror = () => resolve();
+        });
+      }
+    };
+
+    preloadAllRemaining();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [loadFrame]);
 
   useEffect(() => {
@@ -141,6 +161,11 @@ export default function HeroParallax() {
       }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Ensure high-quality scaling on every draw
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
       const cw = canvas.width;
       const ch = canvas.height;
       const iw = imgToDraw.width;
