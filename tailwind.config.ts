@@ -25,6 +25,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
         heading: ["var(--font-syne)", "sans-serif"],
+        airstrike: ["Airstrike", "sans-serif"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

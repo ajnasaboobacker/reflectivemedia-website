@@ -1,3 +1,17 @@
+@font-face {
+  font-family: 'Airstrike';
+  src: url('/assets/airstrike/airstrike.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Airstrike';
+  src: url('/assets/airstrike/airstrikebold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

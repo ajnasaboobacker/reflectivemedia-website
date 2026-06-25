@@ -8,6 +8,7 @@ export default function HeroParallax() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const indicatorsRef = useRef<HTMLDivElement>(null);
+  const textOverlayRef = useRef<HTMLDivElement>(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -134,6 +135,7 @@ export default function HeroParallax() {
     const container = containerRef.current;
     const canvas = canvasRef.current;
     const indicators = indicatorsRef.current;
+    const textOverlay = textOverlayRef.current;
 
     if (!container || !canvas) return;
 
@@ -240,6 +242,20 @@ export default function HeroParallax() {
       0
     );
 
+    if (textOverlay) {
+      tl.to(
+        textOverlay,
+        {
+          opacity: 0,
+          y: -100,
+          scale: 0.95,
+          duration: 0.25,
+          ease: "power2.out",
+        },
+        0
+      );
+    }
+
     return () => {
       window.removeEventListener("resize", resizeCanvas);
       const trigger = ScrollTrigger.getById("hero-scroll-trigger");
@@ -281,6 +297,40 @@ export default function HeroParallax() {
         ref={canvasRef}
         className="absolute inset-0 w-full h-full object-cover z-20 brightness-[0.8] contrast-[1.05]"
       />
+
+      {/* Title/Marketing Text Overlay */}
+      <div
+        ref={textOverlayRef}
+        className="absolute inset-0 flex flex-col justify-between pt-36 pb-20 px-8 md:px-16 z-35 pointer-events-none text-white"
+      >
+        <div /> {/* Top spacer */}
+        
+        {/* Main centered text block */}
+        <div className="flex flex-col items-start justify-center flex-grow w-full max-w-7xl mx-auto px-4 md:px-8 mt-12 md:mt-0">
+          <div className="transform -skew-x-12 select-none">
+            <h2 className="font-airstrike font-bold text-lg sm:text-2xl md:text-4xl tracking-widest uppercase mb-1 drop-shadow-lg text-white">
+              Grow Your
+            </h2>
+            <h1 className="font-airstrike font-black text-5xl sm:text-7xl md:text-[8rem] lg:text-[10rem] tracking-tighter leading-none uppercase drop-shadow-xl text-white">
+              Business
+            </h1>
+          </div>
+        </div>
+
+        {/* Bottom row */}
+        <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-4 md:px-8 select-none">
+          {/* Countries / Region List */}
+          <div className="flex items-center gap-3 font-airstrike text-[10px] sm:text-xs md:text-sm tracking-widest uppercase drop-shadow-md transform -skew-x-12">
+            <span className="w-2 h-2 rounded-full bg-agency-red animate-pulse" />
+            <span className="text-white/95">UAE &nbsp;|&nbsp; INDIA &nbsp;|&nbsp; KUWAIT</span>
+          </div>
+
+          {/* WITH US */}
+          <div className="font-airstrike text-xl sm:text-2xl md:text-4xl tracking-wider uppercase drop-shadow-md transform -skew-x-12 text-white">
+            With Us
+          </div>
+        </div>
+      </div>
 
       {/* Cinematic Frame Interface */}
       <div
