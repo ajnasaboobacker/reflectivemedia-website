@@ -257,6 +257,17 @@ export default function HeroParallax() {
       );
     }
 
+    // Fade out the frame canvas completely at the end of the scroll sequence
+    tl.to(
+      canvas,
+      {
+        opacity: 0,
+        duration: 0.3, // ponytail: fades out over last 30% of scroll trigger (70% to 100%)
+        ease: "power1.inOut"
+      },
+      0.7
+    );
+
     return () => {
       window.removeEventListener("resize", resizeCanvas);
       const trigger = ScrollTrigger.getById("hero-scroll-trigger");

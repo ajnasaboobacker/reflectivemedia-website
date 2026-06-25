@@ -54,7 +54,7 @@ export default function Home() {
       <Navbar />
 
       {/* Main Agency Sections */}
-      <div className="relative z-10 w-full flex flex-col">
+      <div className="relative z-10 w-full">
         {/* Section 1: Hero Zoom Parallax Portal */}
         <HeroParallax />
 
