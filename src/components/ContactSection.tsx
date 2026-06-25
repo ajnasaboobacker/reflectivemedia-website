@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Send, MapPin, Mail, Phone } from "lucide-react";
+import { Send, MapPin, Mail, Phone, Globe } from "lucide-react";
 
 export default function ContactSection() {
-  const [activeCategory, setActiveCategory] = useState<string>("Both");
+  const [activeCategory, setActiveCategory] = useState<string>("Media Production");
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -35,44 +35,63 @@ export default function ContactSection() {
           <div className="lg:col-span-5 flex flex-col gap-8 justify-between">
             <div className="flex flex-col gap-6">
               <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.4em] text-agency-red font-semibold">
-                <span className="w-1.5 h-1.5 bg-agency-red rounded-full" />
+                <span className="w-1.5 h-1.5 bg-agency-red rounded-full animate-pulse" />
                 <span>{"// Connect"}</span>
               </div>
-              <h2 className="font-heading font-black text-4xl md:text-6xl tracking-tight text-white leading-[1.1]">
+              <h2 className="font-heading font-black text-4xl md:text-6xl tracking-tight text-white leading-[1.25]">
                 Let&apos;s Reflect.
               </h2>
-              <p className="text-agency-textGrey text-sm leading-relaxed max-w-sm mt-2">
-                Have a campaign to execute or a cinematic sequence to capture? Get in touch and let&apos;s build something memorable.
+              <p className="text-agency-textGrey text-xs md:text-sm leading-relaxed max-w-sm mt-2">
+                Have a campaign to execute, branding to design, or a cinematic project to capture? Connect with us and let&apos;s build something amazing.
               </p>
             </div>
 
             {/* Studio Coordinates */}
             <div className="flex flex-col gap-6 font-mono text-xs text-agency-textGrey mt-8 lg:mt-0">
+              {/* Email */}
               <div className="flex items-center gap-4 group">
                 <div className="w-9 h-9 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-white group-hover:text-agency-redGlow group-hover:border-agency-red/30 transition-colors duration-300">
                   <Mail size={14} />
                 </div>
-                <a href="mailto:hello@reflectivemedia.agency" className="hover:text-white transition-colors" data-cursor="pointer">
-                  hello@reflectivemedia.agency
+                <a href="mailto:info@reflectivemediaproductions.com" className="hover:text-white transition-colors text-xs" data-cursor="pointer">
+                  info@reflectivemediaproductions.com
                 </a>
               </div>
 
-              <div className="flex items-center gap-4 group">
-                <div className="w-9 h-9 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-white group-hover:text-agency-redGlow group-hover:border-agency-red/30 transition-colors duration-300">
+              {/* Phones */}
+              <div className="flex items-start gap-4 group">
+                <div className="w-9 h-9 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-white group-hover:text-agency-redGlow group-hover:border-agency-red/30 transition-colors duration-300 mt-0.5">
                   <Phone size={14} />
                 </div>
-                <a href="tel:+13235550199" className="hover:text-white transition-colors" data-cursor="pointer">
-                  +1 (323) 555-0199
+                <div className="flex flex-col gap-1">
+                  <a href="tel:+971567648993" className="hover:text-white transition-colors" data-cursor="pointer">
+                    +971 56 764 8993
+                  </a>
+                  <a href="tel:+97126418616" className="hover:text-white transition-colors" data-cursor="pointer">
+                    +971 2 641 8616 (AD)
+                  </a>
+                </div>
+              </div>
+
+              {/* Website link */}
+              <div className="flex items-center gap-4 group">
+                <div className="w-9 h-9 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-white group-hover:text-agency-redGlow group-hover:border-agency-red/30 transition-colors duration-300">
+                  <Globe size={14} />
+                </div>
+                <a href="https://www.reflectivemediaproductions.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors" data-cursor="pointer">
+                  www.reflectivemediaproductions.com
                 </a>
               </div>
 
-              <div className="flex items-center gap-4 group">
-                <div className="w-9 h-9 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-white group-hover:text-agency-redGlow group-hover:border-agency-red/30 transition-colors duration-300">
+              {/* Locations */}
+              <div className="flex items-start gap-4 group">
+                <div className="w-9 h-9 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-white group-hover:text-agency-redGlow group-hover:border-agency-red/30 transition-colors duration-300 mt-0.5">
                   <MapPin size={14} />
                 </div>
-                <span className="leading-relaxed">
-                  Studio 404, Carbon Blvd<br />Los Angeles, CA 90028
-                </span>
+                <div className="flex flex-col gap-1 leading-relaxed">
+                  <span className="text-white font-medium">Headquarters: Abu Dhabi, UAE</span>
+                  <span className="text-agency-textGrey/60">Presence: Abu Dhabi • Dubai • India • Kuwait</span>
+                </div>
               </div>
             </div>
           </div>
@@ -100,12 +119,19 @@ export default function ContactSection() {
                       {"// Select Service"}
                     </label>
                     <div className="flex flex-wrap gap-2 mt-1">
-                      {["Video Production", "Digital Marketing", "Both"].map((cat) => (
+                      {[
+                        "Media Production",
+                        "Branding & Design",
+                        "Digital Marketing",
+                        "Podcasting",
+                        "Web & App Dev",
+                        "Film Production",
+                      ].map((cat) => (
                         <button
                           key={cat}
                           type="button"
                           onClick={() => setActiveCategory(cat)}
-                          className={`px-4 py-2 rounded-full text-xs font-mono tracking-widest border transition-all duration-300 uppercase ${
+                          className={`px-3.5 py-1.5 rounded-full text-[10px] font-mono tracking-widest border transition-all duration-300 uppercase ${
                             activeCategory === cat
                               ? "bg-agency-red border-agency-red text-white shadow-red-glow"
                               : "bg-white/5 border-white/5 text-white/60 hover:border-white/20"
@@ -144,7 +170,7 @@ export default function ContactSection() {
                       required
                       value={formState.email}
                       onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                      placeholder="e.g. director@agency.com"
+                      placeholder="e.g. director@company.com"
                       className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans"
                       data-cursor="pointer"
                     />
@@ -160,7 +186,7 @@ export default function ContactSection() {
                       rows={4}
                       value={formState.message}
                       onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                      placeholder="e.g. We want to shoot a commercial EV campaign..."
+                      placeholder="e.g. We want to shoot a corporate film..."
                       className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans resize-none"
                       data-cursor="pointer"
                     />
@@ -183,11 +209,11 @@ export default function ContactSection() {
 
         {/* Footer Row */}
         <div className="border-t border-white/5 pt-12 flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] font-mono uppercase tracking-[0.2em] text-agency-textGrey/60">
-          <div suppressHydrationWarning>© {new Date().getFullYear()} Reflective Media Agency. All Rights Reserved.</div>
+          <div suppressHydrationWarning>© {new Date().getFullYear()} Reflective Media Productions LLC. All Rights Reserved.</div>
           <div className="flex items-center gap-8">
             <a href="#" className="hover:text-white transition-colors" data-cursor="pointer">Privacy</a>
             <a href="#" className="hover:text-white transition-colors" data-cursor="pointer">Terms</a>
-            <a href="#" className="hover:text-white transition-colors" data-cursor="pointer">{"Studio // Los Angeles"}</a>
+            <a href="#" className="hover:text-white transition-colors" data-cursor="pointer">{"HQ // Abu Dhabi"}</a>
           </div>
         </div>
       </div>

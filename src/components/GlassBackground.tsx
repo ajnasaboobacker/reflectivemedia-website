@@ -33,11 +33,23 @@ function InteractiveScene() {
     const sphere = sphereRef.current;
     const ring = ringRef.current;
     if (sphere && ring) {
-      // Scene progression along the page scroll
+      // Scene progression along the page scroll - push them deeper (z: -3.5) and further bottom-right to clear text space
       gsap.to(sphere.position, {
-        x: 1.5,
-        y: -1.0,
-        z: -1,
+        x: 1.6,
+        y: -1.2,
+        z: -3.5,
+        scrollTrigger: {
+          trigger: "body",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1.5,
+        },
+      });
+
+      gsap.to(ring.position, {
+        x: 1.6,
+        y: -1.2,
+        z: -3.5,
         scrollTrigger: {
           trigger: "body",
           start: "top top",
@@ -47,6 +59,18 @@ function InteractiveScene() {
       });
 
       gsap.to(sphere.scale, {
+        x: 1.3,
+        y: 1.3,
+        z: 1.3,
+        scrollTrigger: {
+          trigger: "body",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1.5,
+        },
+      });
+
+      gsap.to(ring.scale, {
         x: 1.3,
         y: 1.3,
         z: 1.3,
@@ -100,39 +124,39 @@ function InteractiveScene() {
 
   return (
     <>
-      {/* Lights Setup */}
+      {/* Lights Setup - lower directional light intensity */}
       <ambientLight intensity={0.4} />
-      <directionalLight position={[5, 10, 5]} intensity={1.5} color="#ffffff" />
-      <directionalLight position={[-5, -5, -5]} intensity={0.5} color="#e60026" />
+      <directionalLight position={[5, 10, 5]} intensity={0.8} color="#ffffff" />
+      <directionalLight position={[-5, -5, -5]} intensity={0.3} color="#e60026" />
 
-      {/* Orbiting Point Lights Group */}
+      {/* Orbiting Point Lights Group - lower intensities for softer highlights */}
       <group ref={lightsRef}>
-        <pointLight position={[4, 2, 3]} intensity={10} color="#e60026" distance={15} decay={2} />
-        <pointLight position={[-4, -2, -3]} intensity={8} color="#ff3366" distance={15} decay={2} />
-        <pointLight position={[0, 4, -2]} intensity={6} color="#ffffff" distance={12} decay={2} />
+        <pointLight position={[4, 2, 3]} intensity={3} color="#e60026" distance={15} decay={2} />
+        <pointLight position={[-4, -2, -3]} intensity={2.5} color="#ff3366" distance={15} decay={2} />
+        <pointLight position={[0, 4, -2]} intensity={2} color="#ffffff" distance={12} decay={2} />
       </group>
 
-      {/* Central Morphing Glass Sphere */}
+      {/* Central Morphing Glass Sphere - frosted, satin glass properties to diffuse highlights */}
       <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
         <mesh ref={sphereRef} position={[0, 0.5, 0]}>
           <sphereGeometry args={[1.5, 64, 64]} />
           <MeshDistortMaterial
-            color="#2d2d2d"
-            roughness={0.1}
+            color="#181818"
+            roughness={0.65}
             metalness={0.1}
-            distort={0.4}
-            speed={1.5}
-            transmission={0.9}
-            thickness={2.0}
-            clearcoat={1.0}
-            clearcoatRoughness={0.1}
-            attenuationDistance={1}
+            distort={0.3}
+            speed={1.2}
+            transmission={0.55}
+            thickness={1.0}
+            clearcoat={0.15}
+            clearcoatRoughness={0.85}
+            attenuationDistance={2}
             attenuationColor="#e60026"
           />
         </mesh>
       </Float>
 
-      {/* Orbiting Reflective Outer Glass Ring */}
+      {/* Orbiting Reflective Outer Glass Ring - frosted/matte properties */}
       <mesh ref={ringRef} position={[0, 0.5, 0]} rotation={[Math.PI / 4, Math.PI / 6, 0]}>
         <torusGeometry args={[2.5, 0.06, 16, 100]} />
         <meshPhysicalMaterial

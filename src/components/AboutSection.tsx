@@ -3,23 +3,46 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { 
+  Target, 
+  Eye, 
+  Sparkles, 
+  Compass, 
+  Award, 
+  Zap, 
+  Users, 
+  TrendingUp, 
+  Cpu, 
+  Shield 
+} from "lucide-react";
+
+const CORE_VALUES = [
+  { icon: Sparkles, name: "Creativity with Purpose" },
+  { icon: Compass, name: "Strategy First" },
+  { icon: Award, name: "Excellence in Execution" },
+  { icon: Zap, name: "Speed with Precision" },
+  { icon: Users, name: "Client-Centric Approach" },
+  { icon: TrendingUp, name: "Results-Driven Mindset" },
+  { icon: Cpu, name: "Innovation & Adaptability" },
+  { icon: Shield, name: "Integrity & Transparency" },
+];
 
 export default function AboutSection() {
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const textRef = useRef<HTMLParagraphElement>(null);
+  const textRef1 = useRef<HTMLParagraphElement>(null);
+  const textRef2 = useRef<HTMLParagraphElement>(null);
   const statsContainerRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const valuesContainerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    const heading = headingRef.current;
-    const paragraph = textRef.current;
-
-    if (heading && paragraph) {
-      // Clean slide-up & fade-in for the main heading
+    // Fade-in animations
+    if (headingRef.current) {
       gsap.fromTo(
-        heading,
+        headingRef.current,
         { y: 50, opacity: 0 },
         {
           y: 0,
@@ -27,25 +50,68 @@ export default function AboutSection() {
           duration: 1.2,
           ease: "power4.out",
           scrollTrigger: {
-            trigger: heading,
+            trigger: headingRef.current,
             start: "top 85%",
           },
         }
       );
+    }
 
-      // Clean slide-up & fade-in for the body text with a slight delay
+    [textRef1.current, textRef2.current].forEach((para, idx) => {
+      if (para) {
+        gsap.fromTo(
+          para,
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1.2,
+            delay: idx * 0.15,
+            ease: "power4.out",
+            scrollTrigger: {
+              trigger: para,
+              start: "top 85%",
+            },
+          }
+        );
+      }
+    });
+
+    // Mission/Vision cards reveal
+    const cards = cardsContainerRef.current?.querySelectorAll(".mv-card");
+    if (cards) {
       gsap.fromTo(
-        paragraph,
-        { y: 30, opacity: 0 },
+        cards,
+        { y: 40, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 1.2,
-          delay: 0.15,
-          ease: "power4.out",
+          duration: 1,
+          stagger: 0.2,
+          ease: "power3.out",
           scrollTrigger: {
-            trigger: paragraph,
+            trigger: cardsContainerRef.current,
             start: "top 85%",
+          },
+        }
+      );
+    }
+
+    // Core Values badges reveal
+    const values = valuesContainerRef.current?.querySelectorAll(".value-badge");
+    if (values) {
+      gsap.fromTo(
+        values,
+        { scale: 0.9, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.08,
+          ease: "back.out(1.7)",
+          scrollTrigger: {
+            trigger: valuesContainerRef.current,
+            start: "top 90%",
           },
         }
       );
@@ -55,26 +121,50 @@ export default function AboutSection() {
     const stats = statsContainerRef.current?.querySelectorAll(".stat-num");
     if (stats) {
       stats.forEach((stat) => {
-        const targetVal = parseInt(stat.getAttribute("data-target") || "0", 10);
+        const isLetterAnim = stat.getAttribute("data-target") === "A-Z";
         const suffix = stat.getAttribute("data-suffix") || "";
         
-        gsap.fromTo(
-          stat,
-          { textContent: "0" },
-          {
-            textContent: targetVal.toString(),
-            duration: 2,
-            ease: "power2.out",
-            snap: { textContent: 1 },
-            scrollTrigger: {
-              trigger: stat,
-              start: "top 85%",
-            },
-            onUpdate: function () {
-              stat.innerHTML = this.targets()[0].textContent + suffix;
-            },
-          }
-        );
+        if (isLetterAnim) {
+          const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const obj = { val: 0 };
+          gsap.fromTo(
+            obj,
+            { val: 0 },
+            {
+              val: 25,
+              duration: 2,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: stat,
+                start: "top 85%",
+              },
+              onUpdate: function () {
+                const progress = this.progress(); // 0 to 1
+                const index = Math.floor(progress * 25);
+                stat.innerHTML = chars[25 - index] + suffix;
+              },
+            }
+          );
+        } else {
+          const targetVal = parseInt(stat.getAttribute("data-target") || "0", 10);
+          gsap.fromTo(
+            stat,
+            { textContent: "0" },
+            {
+              textContent: targetVal.toString(),
+              duration: 2,
+              ease: "power2.out",
+              snap: { textContent: 1 },
+              scrollTrigger: {
+                trigger: stat,
+                start: "top 85%",
+              },
+              onUpdate: function () {
+                stat.innerHTML = this.targets()[0].textContent + suffix;
+              },
+            }
+          );
+        }
       });
     }
   }, []);
@@ -85,92 +175,167 @@ export default function AboutSection() {
       ref={triggerRef}
       className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 flex flex-col justify-center items-center bg-transparent z-20"
     >
-      <div className="max-w-6xl mx-auto w-full flex flex-col gap-12 md:gap-16">
+      <div className="max-w-6xl mx-auto w-full flex flex-col gap-16 md:gap-24">
         {/* Monospace Indicator */}
         <div className="flex items-center gap-3 self-start text-xs font-mono uppercase tracking-[0.4em] text-agency-red font-semibold">
-          <span className="w-1.5 h-1.5 bg-agency-red rounded-full" />
-          <span>{"// Agency DNA"}</span>
+          <span className="w-1.5 h-1.5 bg-agency-red rounded-full animate-pulse" />
+          <span>{"// Who We Are"}</span>
         </div>
 
-        {/* Narrative Section */}
-        <div className="max-w-4xl flex flex-col gap-6">
-          <h1
+        {/* Narrative & Description */}
+        <div className="max-w-5xl flex flex-col gap-8">
+          <h2
             ref={headingRef}
-            className="font-heading font-extrabold text-3xl md:text-5xl lg:text-6xl leading-[1.15] tracking-tight text-left text-white text-balance"
+            className="font-heading font-extrabold text-4xl md:text-5xl lg:text-6xl leading-[1.2] tracking-tight text-left text-white"
           >
-            Cinematic storytelling <br className="hidden md:inline" />
-            meets <span className="text-agency-redGlow text-glow-accent">performance marketing.</span>
-          </h1>
-          <p
-            ref={textRef}
-            className="font-sans font-light text-base md:text-xl lg:text-2xl leading-relaxed text-left text-agency-textGrey/90 max-w-3xl mt-2 text-balance"
+            Reflective <span className="text-agency-redGlow text-glow-accent">Media</span> Productions
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 text-agency-textGrey/90 font-sans font-light text-base md:text-lg leading-relaxed">
+            <p ref={textRef1}>
+              Reflective Media Productions LLC is a UAE based creative production and digital marketing company dedicated to bringing brands to life through compelling storytelling, innovative visuals, and strategic marketing.
+            </p>
+            <p ref={textRef2}>
+              We combine innovation, design, and data-driven insights to craft marketing solutions that engage audiences, strengthen brand presence, and deliver measurable business results. Our focus is on helping businesses transform their vision into a compelling digital identity that inspires trust, drives growth, and creates lasting impact.
+            </p>
+          </div>
+        </div>
+
+        {/* Mission & Vision Cards */}
+        <div 
+          ref={cardsContainerRef} 
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-4"
+        >
+          {/* Vision */}
+          <div className="mv-card glassmorphism p-8 md:p-10 rounded-3xl border border-white/5 shadow-glass shadow-glass-inset relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-red-glow-gradient opacity-5 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none" />
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-agency-redGlow">
+                <Eye size={22} className="stroke-[1.5]" />
+              </div>
+              <h3 className="font-heading font-bold text-xl md:text-2xl text-white">Our Vision</h3>
+            </div>
+            <p className="text-agency-textGrey text-sm md:text-base leading-relaxed">
+              To be a leading creative production and marketing company, delivering impactful and world-class brand experiences that inspire, engage, and drive lasting success.
+            </p>
+          </div>
+
+          {/* Mission */}
+          <div className="mv-card glassmorphism p-8 md:p-10 rounded-3xl border border-white/5 shadow-glass shadow-glass-inset relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-red-glow-gradient opacity-5 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none" />
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-agency-redGlow">
+                <Target size={22} className="stroke-[1.5]" />
+              </div>
+              <h3 className="font-heading font-bold text-xl md:text-2xl text-white">Our Mission</h3>
+            </div>
+            <p className="text-agency-textGrey text-sm md:text-base leading-relaxed">
+              To create innovative content and strategic marketing solutions that engage audiences, strengthen brand identity, and deliver measurable business growth.
+            </p>
+          </div>
+        </div>
+
+        {/* Core Values Badge Grid */}
+        <div className="flex flex-col gap-6 mt-8">
+          <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.4em] text-agency-textGrey/60">
+            <span>{"// Core Values"}</span>
+          </div>
+          <div 
+            ref={valuesContainerRef} 
+            className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
-            Reflective Media develops engaging video assets and optimized digital campaigns to help brands tell their story and connect with their target audience.
-          </p>
+            {CORE_VALUES.map((val, idx) => {
+              const IconComp = val.icon;
+              return (
+                <div 
+                  key={idx} 
+                  className="value-badge glassmorphism px-6 py-5 rounded-2xl border border-white/5 flex flex-col gap-3 hover:border-white/15 hover:bg-white/[0.04] transition-all duration-300 group"
+                >
+                  <div className="text-agency-redGlow/70 group-hover:text-agency-redGlow transition-colors duration-300">
+                    <IconComp size={20} className="stroke-[1.5]" />
+                  </div>
+                  <span className="text-xs md:text-sm font-sans font-medium text-white/95">
+                    {val.name}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Stats Grid */}
         <div
           ref={statsContainerRef}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 mt-12"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mt-12"
         >
           {/* Stat 1 */}
-          <div className="glassmorphism p-8 rounded-2xl flex flex-col gap-2 relative overflow-hidden border border-white/5 shadow-glass shadow-glass-inset">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-red-glow-gradient opacity-10 pointer-events-none" />
+          <div className="glassmorphism p-8 rounded-2xl flex flex-col gap-2 relative overflow-hidden border border-white/5 shadow-glass shadow-glass-inset group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-red-glow-gradient opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity duration-300" />
             <span
-              className="stat-num font-heading font-black text-4xl md:text-5xl text-foreground"
-              data-target="150"
+              className="stat-num font-heading font-black text-4xl md:text-5xl text-white"
+              data-target="450"
               data-suffix="+"
             >
               0+
             </span>
-            <span className="text-xs font-mono tracking-widest text-agency-textGrey uppercase mt-2">
-              {"// Completed Projects"}
+            <span className="text-[10px] font-mono tracking-widest text-agency-textGrey uppercase mt-2">
+              {"// Projects Delivered"}
+            </span>
+            <span className="text-[9px] font-mono text-agency-redGlow mt-1 uppercase">
+              In UAE, India, Kuwait
             </span>
           </div>
 
           {/* Stat 2 */}
-          <div className="glassmorphism p-8 rounded-2xl flex flex-col gap-2 relative overflow-hidden border border-white/5 shadow-glass shadow-glass-inset">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-red-glow-gradient opacity-10 pointer-events-none" />
+          <div className="glassmorphism p-8 rounded-2xl flex flex-col gap-2 relative overflow-hidden border border-white/5 shadow-glass shadow-glass-inset group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-red-glow-gradient opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity duration-300" />
             <span
-              className="stat-num font-heading font-black text-4xl md:text-5xl text-foreground"
-              data-target="24"
-              data-suffix="M+"
-            >
-              0M+
-            </span>
-            <span className="text-xs font-mono tracking-widest text-agency-textGrey uppercase mt-2">
-              {"// Views Generated"}
-            </span>
-          </div>
-
-          {/* Stat 3 */}
-          <div className="glassmorphism p-8 rounded-2xl flex flex-col gap-2 relative overflow-hidden border border-white/5 shadow-glass shadow-glass-inset">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-red-glow-gradient opacity-10 pointer-events-none" />
-            <span
-              className="stat-num font-heading font-black text-4xl md:text-5xl text-foreground"
-              data-target="98"
+              className="stat-num font-heading font-black text-4xl md:text-5xl text-white"
+              data-target="95"
               data-suffix="%"
             >
               0%
             </span>
-            <span className="text-xs font-mono tracking-widest text-agency-textGrey uppercase mt-2">
-              {"// Client Retention"}
+            <span className="text-[10px] font-mono tracking-widest text-agency-textGrey uppercase mt-2">
+              {"// Satisfied Clients"}
+            </span>
+            <span className="text-[9px] font-mono text-agency-redGlow mt-1 uppercase">
+              Proven Trust
+            </span>
+          </div>
+
+          {/* Stat 3 */}
+          <div className="glassmorphism p-8 rounded-2xl flex flex-col gap-2 relative overflow-hidden border border-white/5 shadow-glass shadow-glass-inset group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-red-glow-gradient opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity duration-300" />
+            <span
+              className="stat-num font-heading font-black text-4xl md:text-5xl text-white"
+              data-target="24"
+              data-suffix="/7"
+            >
+              0/7
+            </span>
+            <span className="text-[10px] font-mono tracking-widest text-agency-textGrey uppercase mt-2">
+              {"// Creative Support"}
+            </span>
+            <span className="text-[9px] font-mono text-agency-redGlow mt-1 uppercase">
+              Always On
             </span>
           </div>
 
           {/* Stat 4 */}
-          <div className="glassmorphism p-8 rounded-2xl flex flex-col gap-2 relative overflow-hidden border border-white/5 shadow-glass shadow-glass-inset">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-red-glow-gradient opacity-10 pointer-events-none" />
+          <div className="glassmorphism p-8 rounded-2xl flex flex-col gap-2 relative overflow-hidden border border-white/5 shadow-glass shadow-glass-inset group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-red-glow-gradient opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity duration-300" />
             <span
-              className="stat-num font-heading font-black text-4xl md:text-5xl text-foreground"
-              data-target="12"
-              data-suffix="+"
+              className="stat-num font-heading font-black text-4xl md:text-5xl text-white"
+              data-target="A-Z"
+              data-suffix="-Z"
             >
-              0+
+              Z-Z
             </span>
-            <span className="text-xs font-mono tracking-widest text-agency-textGrey uppercase mt-2">
-              {"// Creative Awards"}
+            <span className="text-[10px] font-mono tracking-widest text-agency-textGrey uppercase mt-2">
+              {"// Branding Solutions"}
+            </span>
+            <span className="text-[9px] font-mono text-agency-redGlow mt-1 uppercase">
+              Complete Delivery
             </span>
           </div>
         </div>

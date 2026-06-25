@@ -1,34 +1,66 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { Video, TrendingUp, Sparkles, Compass } from "lucide-react";
+import { Camera, Palette, TrendingUp, Mic, Target, Sparkles, Code, Film } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const SERVICES_DATA = [
   {
-    icon: Video,
-    title: "Video Production",
-    desc: "Cinematic commercial films, corporate documentaries, high-impact social media deliverables, and expert motion graphics that capture your brand's essence.",
-    features: ["Cinematography", "Creative Direction", "Post-Production", "Color Grading"],
+    num: "01",
+    icon: Camera,
+    title: "Media Production",
+    desc: "High quality video production, photography, and creative content designed to capture attention, communicate your message, and strengthen your brand presence.",
+    features: ["Commercials", "Photography", "Creative Content", "Social Assets"],
   },
   {
+    num: "02",
+    icon: Palette,
+    title: "Branding & Design",
+    desc: "Building distinctive brand identities through strategic design, visual consistency, and creative solutions that leave a lasting impression.",
+    features: ["Brand Identity", "Visual Systems", "Logo Overhaul", "Collateral"],
+  },
+  {
+    num: "03",
     icon: TrendingUp,
     title: "Digital Marketing",
-    desc: "Data-driven advertising campaigns, search engine optimization campaigns, conversions audit, and hyper-targeted paid ads to maximize your visual ROI.",
-    features: ["Meta & Google Ads", "Conversion Rate Audits", "SEO Architectures", "Funnel Strategy"],
+    desc: "Data driven marketing strategies focused on increasing visibility, audience engagement, lead generation, and business growth.",
+    features: ["SEO / SEM", "Lead Generation", "Growth Ads", "Engagement"],
   },
   {
+    num: "04",
+    icon: Mic,
+    title: "Podcasting",
+    desc: "End to end podcast production services, from concept development and recording to editing, publishing, and distribution.",
+    features: ["Audio Concepting", "Multi-Mic Recording", "Distribution", "Audio SEO"],
+  },
+  {
+    num: "05",
+    icon: Target,
+    title: "Advertising & Strategy",
+    desc: "Strategic campaign planning and execution designed to reach the right audience, maximize impact, and deliver measurable results.",
+    features: ["Campaign Planning", "Target Optimization", "Copywriting", "Analytics"],
+  },
+  {
+    num: "06",
     icon: Sparkles,
-    title: "Social Growth",
-    desc: "Short-form vertical video loops, viral creative templates, influencer orchestration, and platform-specific community growth strategies.",
-    features: ["Short-form Concepting", "TikTok & Reel Strategy", "Community Design", "Trend Analysis"],
+    title: "AI Video Production",
+    desc: "AI powered video solutions that enable fast, scalable, and engaging content creation for modern digital platforms.",
+    features: ["Fast Scale", "AI Video Tech", "Modern Templates", "Automation"],
   },
   {
-    icon: Compass,
-    title: "Brand Direction",
-    desc: "Creative direction, typography design systems, brand guidelines, UI/UX conceptual layout, and identity guidelines that establish market authority.",
-    features: ["Visual Identity", "Typography Systems", "Art Direction", "UI/UX Prototypes"],
+    num: "07",
+    icon: Code,
+    title: "Web & App Development",
+    desc: "Designing and developing high performance websites and mobile applications with seamless user experiences and robust functionality.",
+    features: ["High-Perf Websites", "UX/UI Architecture", "Mobile Apps", "Custom Web"],
+  },
+  {
+    num: "08",
+    icon: Film,
+    title: "Film Production",
+    desc: "Professional film production services, including concept development, scriptwriting, cinematic production, post-production, VFX, sound design, and final delivery.",
+    features: ["Scriptwriting", "Cinematography", "VFX & Sound", "Final Delivery"],
   },
 ];
 
@@ -48,7 +80,7 @@ export default function ServicesSection() {
       {
         y: 0,
         opacity: 1,
-        stagger: 0.15,
+        stagger: 0.1,
         duration: 1,
         ease: "power3.out",
         scrollTrigger: {
@@ -69,7 +101,7 @@ export default function ServicesSection() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.4em] text-agency-red font-semibold">
-              <span className="w-1.5 h-1.5 bg-agency-red rounded-full" />
+              <span className="w-1.5 h-1.5 bg-agency-red rounded-full animate-pulse" />
               <span>{"// Capabilities"}</span>
             </div>
             <h2 className="font-heading font-black text-4xl md:text-6xl tracking-tight text-white">
@@ -84,42 +116,47 @@ export default function ServicesSection() {
         {/* Services Grid */}
         <div
           ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mt-4"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4"
         >
           {SERVICES_DATA.map((service, index) => {
             const IconComponent = service.icon;
             return (
               <div
                 key={index}
-                className="service-card glassmorphism glassmorphism-hover p-8 md:p-10 rounded-3xl flex flex-col justify-between gap-8 border border-white/5 shadow-glass relative overflow-hidden group"
+                className="service-card glassmorphism glassmorphism-hover p-8 rounded-3xl flex flex-col justify-between gap-8 border border-white/5 shadow-glass relative overflow-hidden group"
                 data-cursor="pointer"
               >
                 {/* Radial Glow on Hover */}
                 <div className="absolute top-0 right-0 w-48 h-48 bg-red-glow-gradient opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                 <div className="flex flex-col gap-6">
-                  {/* Icon */}
-                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:text-agency-redGlow group-hover:border-agency-red/30 transition-colors duration-300">
-                    <IconComponent size={22} className="stroke-[1.5]" />
+                  {/* Top bar with Icon and index number */}
+                  <div className="flex justify-between items-start">
+                    <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white group-hover:text-agency-redGlow group-hover:border-agency-red/30 transition-colors duration-300">
+                      <IconComponent size={22} className="stroke-[1.5]" />
+                    </div>
+                    <span className="font-mono text-xs text-agency-textGrey/45 tracking-widest font-semibold">
+                      {service.num}
+                    </span>
                   </div>
 
                   {/* Text Details */}
                   <div className="flex flex-col gap-3">
-                    <h3 className="font-heading font-bold text-xl md:text-2xl text-white tracking-tight group-hover:text-agency-redGlow transition-colors duration-300">
+                    <h3 className="font-heading font-bold text-lg md:text-xl leading-snug text-white tracking-tight group-hover:text-agency-redGlow transition-colors duration-300">
                       {service.title}
                     </h3>
-                    <p className="text-agency-textGrey text-sm leading-relaxed">
+                    <p className="text-agency-textGrey text-xs md:text-sm leading-relaxed">
                       {service.desc}
                     </p>
                   </div>
                 </div>
 
                 {/* Sub features tags */}
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 pt-2">
                   {service.features.map((feature, fIndex) => (
                     <span
                       key={fIndex}
-                      className="px-3 py-1 bg-white/5 border border-white/5 rounded-full text-[10px] font-mono tracking-wider text-white/60 uppercase"
+                      className="px-2.5 py-1 bg-white/5 border border-white/5 rounded-full text-[9px] font-mono tracking-wider text-white/50 uppercase group-hover:border-white/10 group-hover:bg-white/[0.08] transition-all duration-300"
                     >
                       {feature}
                     </span>

@@ -6,32 +6,46 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const PROJECTS = [
   {
-    title: "Project Redshift",
-    category: "Commercial Film & Video Production",
-    desc: "A futuristic visual brand campaign for an EV startup, combining high-velocity cinematic shots with neon aesthetics.",
-    color: "from-[#e60026]/40 via-transparent to-black",
-    speed: -40,
+    title: "Sarco Jewellery",
+    category: "Campaign Photography & Visuals",
+    desc: "Premium visual assets and campaign photography showcasing gold bars and luxurious jewellery items with timeless appeal.",
+    color: "from-[#b38f00]/30 via-transparent to-black",
+    speed: -30,
   },
   {
-    title: "Veloce Marketing",
-    category: "Performance Ads Campaign",
-    desc: "Scale orchestration of multi-channel ad copy, delivering a 4.2x ROI improvement using custom high-retention video loops.",
-    color: "from-zinc-800/40 via-transparent to-black",
-    speed: -120, // Moves faster for parallax depth
+    title: "Theja Ayurveda",
+    category: "Creative Campaign & Visual Design",
+    desc: "Digital identity and campaigns for Abu Dhabi's leading ayurvedic treatment centre, connecting ancient healing with modern lifestyles.",
+    color: "from-[#2e6f40]/30 via-transparent to-black",
+    speed: -90,
   },
   {
-    title: "Neon Velocity",
-    category: "Social Campaign & Reels",
-    desc: "Creating viral short-form sequences generating over 15 million views across platforms in less than 30 days.",
-    color: "from-[#800014]/40 via-transparent to-black",
-    speed: -60,
+    title: "Tatheer Hotels",
+    category: "Web Optimization & Performance Marketing",
+    desc: "Smart hotel booking interface designs and campaigns to optimize bookings and drive performance marketing.",
+    color: "from-[#1c4e80]/30 via-transparent to-black",
+    speed: -50,
   },
   {
-    title: "Aether Branding",
-    category: "Visual Identity & Strategy",
-    desc: "Complete design overhaul, style guidelines, typography guidelines, and digital mapping for an international media agency.",
-    color: "from-zinc-900/60 via-transparent to-black",
-    speed: -160, // Moves much faster
+    title: "Karemah Dates",
+    category: "Premium Packaging & Social Design",
+    desc: "Sophisticated packaging assets and social media visual strategies highlighting premium quality Arabian dates.",
+    color: "from-[#7c3f00]/30 via-transparent to-black",
+    speed: -110,
+  },
+  {
+    title: "Natya Institute",
+    category: "Promotional Reels & Campaign Strategy",
+    desc: "Vibrant reels and campaign strategies capturing the elegance and history of classical Indian dance admissions.",
+    color: "from-[#5b2c6f]/30 via-transparent to-black",
+    speed: -70,
+  },
+  {
+    title: "Convention Centre",
+    category: "Event Venue Marketing & Video Assets",
+    desc: "High-end corporate brochures and cinematic walkthrough packages designed for premium wedding and conference spaces.",
+    color: "from-[#8a1c14]/30 via-transparent to-black",
+    speed: -130,
   },
 ];
 
@@ -74,10 +88,10 @@ export default function WorkSection() {
         {/* Header Section */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.4em] text-agency-red font-semibold">
-            <span className="w-1.5 h-1.5 bg-agency-red rounded-full" />
+            <span className="w-1.5 h-1.5 bg-agency-red rounded-full animate-pulse" />
             <span>{"// Featured Work"}</span>
           </div>
-          <h2 className="font-heading font-black text-4xl md:text-6xl tracking-tight text-white">
+          <h2 className="font-heading font-black text-4xl md:text-6xl leading-tight tracking-tight text-white">
             Shaping Legends.
           </h2>
         </div>
@@ -92,9 +106,9 @@ export default function WorkSection() {
               }`}
               data-speed={project.speed}
             >
-              {/* Graphic Placeholder (representing high-fidelity visuals) */}
+              {/* Graphic Placeholder */}
               <div
-                className={`relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-gradient-to-tr ${project.color} border border-white/5 shadow-glass flex items-center justify-center p-8`}
+                className={`relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-gradient-to-tr ${project.color} border border-white/5 shadow-glass flex items-center justify-center p-8 transition-transform duration-500 hover:scale-[1.01]`}
                 data-cursor="view"
               >
                 {/* Frosted Glass Overlay */}
@@ -121,13 +135,13 @@ export default function WorkSection() {
 
               {/* Text Info */}
               <div className="flex flex-col gap-3 px-2">
-                <span className="text-[10px] font-mono tracking-widest text-agency-red uppercase">
+                <span className="text-[10px] font-mono tracking-widest text-agency-redGlow uppercase">
                   {project.category}
                 </span>
-                <h3 className="font-heading font-bold text-2xl md:text-3xl text-white tracking-tight group-hover:text-agency-redGlow transition-colors duration-300">
+                <h3 className="font-heading font-bold text-2xl md:text-3xl leading-tight text-white tracking-tight group-hover:text-agency-redGlow transition-colors duration-300">
                   {project.title}
                 </h3>
-                <p className="text-agency-textGrey text-sm leading-relaxed max-w-md">
+                <p className="text-agency-textGrey text-xs md:text-sm leading-relaxed max-w-md">
                   {project.desc}
                 </p>
               </div>

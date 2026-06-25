@@ -18,24 +18,16 @@ export default function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    "name": "Reflective Media",
-    "image": "https://reflectivemedia.agency/assets/reflective_Media_Final_Logo_White_PNG.png",
-    "@id": "https://reflectivemedia.agency/#organization",
-    "url": "https://reflectivemedia.agency",
-    "telephone": "+13235550199",
+    "name": "Reflective Media Productions",
+    "image": "https://www.reflectivemediaproductions.com/assets/reflective_Media_Final_Logo_White_PNG.png",
+    "@id": "https://www.reflectivemediaproductions.com/#organization",
+    "url": "https://www.reflectivemediaproductions.com",
+    "telephone": "+971567648993",
     "priceRange": "$$$",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Studio 404, Carbon Blvd",
-      "addressLocality": "Los Angeles",
-      "addressRegion": "CA",
-      "postalCode": "90028",
-      "addressCountry": "US"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": 34.0928,
-      "longitude": -118.3287
+      "addressLocality": "Abu Dhabi",
+      "addressCountry": "AE"
     }
   };
 
