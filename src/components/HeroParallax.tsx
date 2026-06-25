@@ -232,12 +232,13 @@ export default function HeroParallax() {
       },
     });
 
-    // Synchronize cinematic overlays fading with the scroll timeline
+    // Synchronize cinematic overlays and text fading with the scroll timeline
     tl.to(
       indicators,
       {
         opacity: 0,
-        duration: 0.2,
+        duration: 0.3, // ponytail: fades out over first 30% of scroll
+        ease: "power1.inOut"
       },
       0
     );
@@ -247,9 +248,9 @@ export default function HeroParallax() {
         textOverlay,
         {
           opacity: 0,
-          y: -100,
-          scale: 0.95,
-          duration: 0.25,
+          scale: 1.25, // ponytail: zooms in to match the camera zoom
+          y: -50,      // smooth drift up
+          duration: 0.6, // ponytail: fades out over 60% of scroll trigger for alignment with camera motion
           ease: "power2.out",
         },
         0
@@ -301,24 +302,23 @@ export default function HeroParallax() {
       {/* Title/Marketing Text Overlay */}
       <div
         ref={textOverlayRef}
-        className="absolute inset-0 flex flex-col justify-between pt-36 pb-20 px-8 md:px-16 z-35 pointer-events-none text-white"
+        className="absolute inset-0 flex flex-col justify-between pt-36 pb-20 px-8 md:px-20 lg:px-28 z-[35] pointer-events-none text-white"
       >
         <div /> {/* Top spacer */}
         
-        {/* Main centered text block */}
-        <div className="flex flex-col items-start justify-center flex-grow w-full max-w-7xl mx-auto px-4 md:px-8 mt-12 md:mt-0">
-          <div className="transform -skew-x-12 select-none">
-            <h2 className="font-airstrike font-bold text-lg sm:text-2xl md:text-4xl tracking-widest uppercase mb-1 drop-shadow-lg text-white">
-              Grow Your
-            </h2>
-            <h1 className="font-airstrike font-black text-5xl sm:text-7xl md:text-[8rem] lg:text-[10rem] tracking-tighter leading-none uppercase drop-shadow-xl text-white">
-              Business
-            </h1>
-          </div>
+        {/* Main centered text block - removed max-w-7xl to let it span screen-wide, matching client mockup */}
+        <div className="flex flex-col items-start justify-center flex-grow w-full mt-12 md:mt-0">
+          {/* Apply skew individually to children so their left edges remain perfectly aligned */}
+          <h2 className="font-airstrike font-bold text-lg sm:text-2xl md:text-4xl tracking-widest uppercase mb-1 drop-shadow-lg text-white transform -skew-x-12 select-none whitespace-nowrap">
+            Grow Your
+          </h2>
+          <h1 className="font-airstrike font-black text-5xl sm:text-7xl md:text-[9rem] lg:text-[11rem] xl:text-[13rem] tracking-tighter leading-none uppercase drop-shadow-xl text-white transform -skew-x-12 select-none w-full whitespace-nowrap">
+            Business
+          </h1>
         </div>
 
-        {/* Bottom row */}
-        <div className="w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-4 md:px-8 select-none">
+        {/* Bottom row - spans screen-wide to align with left/right edges */}
+        <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-6 select-none">
           {/* Countries / Region List */}
           <div className="flex items-center gap-3 font-airstrike text-[10px] sm:text-xs md:text-sm tracking-widest uppercase drop-shadow-md transform -skew-x-12">
             <span className="w-2 h-2 rounded-full bg-agency-red animate-pulse" />
