@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -11,35 +11,100 @@ export default function HeroParallax() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
+  
+  const totalFrames = 240;
+  const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
+  const activeFrameRef = useRef<number>(0);
+  const drawActiveFrameRef = useRef<(() => void) | null>(null);
 
-  // Preload frames in the background
-  useEffect(() => {
-    const totalFrames = 240;
-    let loadedCount = 0;
-    const loadedImages: HTMLImageElement[] = [];
-
-    for (let i = 1; i <= totalFrames; i++) {
-      const img = new Image();
-      const frameNum = String(i).padStart(3, "0");
-      img.src = `/assets/RM_Video_Frames/ezgif-frame-${frameNum}.png`;
-      img.onload = () => {
-        loadedCount++;
-        setLoadingProgress(Math.round((loadedCount / totalFrames) * 100));
-        if (loadedCount === totalFrames) {
-          setIsLoading(false);
-        }
-      };
-      img.onerror = () => {
-        loadedCount++;
-        if (loadedCount === totalFrames) {
-          setIsLoading(false);
-        }
-      };
-      loadedImages.push(img);
+  // Helper to load a single frame on-demand (1-indexed)
+  const loadFrame = useCallback((index: number, onLoadCallback?: () => void) => {
+    const frameIdx = index - 1;
+    if (imagesRef.current[frameIdx]) {
+      if (onLoadCallback) onLoadCallback();
+      return imagesRef.current[frameIdx]!;
     }
-    imagesRef.current = loadedImages;
+
+    const img = new Image();
+    const frameNum = String(index).padStart(3, "0");
+    img.src = `/assets/RM_Video_Frames/ezgif-frame-${frameNum}.png`;
+    imagesRef.current[frameIdx] = img;
+
+    img.onload = () => {
+      if (onLoadCallback) onLoadCallback();
+      // If the loaded frame matches the active frame we want to show, trigger an immediate redraw
+      if (activeFrameRef.current === frameIdx && drawActiveFrameRef.current) {
+        drawActiveFrameRef.current();
+      }
+    };
+
+    img.onerror = () => {
+      console.warn(`Failed to load frame ${index}`);
+      if (onLoadCallback) onLoadCallback();
+    };
+
+    return img;
   }, []);
+
+  // Preload sliding window of images around current frame to prevent flickering
+  const preloadWindow = useCallback((currentIndex: number) => {
+    const bufferAhead = 15;
+    const bufferBehind = 5;
+    
+    for (let i = currentIndex - bufferBehind; i <= currentIndex + bufferAhead; i++) {
+      if (i >= 0 && i < totalFrames) {
+        loadFrame(i + 1);
+      }
+    }
+  }, [loadFrame]);
+
+  // Find the nearest loaded frame (0-indexed) to render when target frame is still loading
+  const findNearestLoadedImage = useCallback((currentIndex: number): HTMLImageElement | null => {
+    // ponytail: linear search outward is O(N) scan. Ceiling is totalFrames (240), fine for client execution.
+    let offset = 1;
+    while (offset < totalFrames) {
+      const prev = currentIndex - offset;
+      const next = currentIndex + offset;
+      if (prev >= 0 && imagesRef.current[prev]?.complete) {
+        return imagesRef.current[prev];
+      }
+      if (next < totalFrames && imagesRef.current[next]?.complete) {
+        return imagesRef.current[next];
+      }
+      offset++;
+    }
+    return null;
+  }, []);
+
+  // Preload initial frames and keyframes in background
+  useEffect(() => {
+    // Initialize images container
+    imagesRef.current = new Array(totalFrames).fill(null);
+
+    // Load initial critical frames to unlock the loading screen fast
+    const criticalToLoad = 8;
+    let criticalLoaded = 0;
+
+    for (let i = 1; i <= criticalToLoad; i++) {
+      loadFrame(i, () => {
+        criticalLoaded++;
+        setLoadingProgress(Math.round((criticalLoaded / criticalToLoad) * 100));
+        if (criticalLoaded === criticalToLoad) {
+          setIsLoading(false);
+        }
+      });
+    }
+
+    // Load sparse keyframes (every 8th frame) in background to serve as fast-scroll fallbacks
+    const timeoutId = setTimeout(() => {
+      const step = 8;
+      for (let i = criticalToLoad + 1; i <= totalFrames; i += step) {
+        loadFrame(i);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [loadFrame]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -55,24 +120,44 @@ export default function HeroParallax() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const totalFrames = 240;
-
     const drawFrame = (index: number) => {
-      const img = imagesRef.current[index];
-      if (img && img.complete) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const cw = canvas.width;
-        const ch = canvas.height;
-        const iw = img.width;
-        const ih = img.height;
-        const r = Math.max(cw / iw, ch / ih);
-        const nw = iw * r;
-        const nh = ih * r;
-        const cx = (cw - nw) / 2;
-        const cy = (ch - nh) / 2;
-        ctx.drawImage(img, cx, cy, nw, nh);
+      let img = imagesRef.current[index];
+
+      // Ensure the frame object exists and has started loading
+      if (!img) {
+        img = loadFrame(index + 1);
       }
+
+      // If not fully loaded, fallback to nearest loaded frame
+      let imgToDraw = img;
+      if (!img.complete) {
+        const fallback = findNearestLoadedImage(index);
+        if (fallback) {
+          imgToDraw = fallback;
+        } else {
+          // If no fallback at all, do nothing to prevent blank canvas
+          return;
+        }
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cw = canvas.width;
+      const ch = canvas.height;
+      const iw = imgToDraw.width;
+      const ih = imgToDraw.height;
+      const r = Math.max(cw / iw, ch / ih);
+      const nw = iw * r;
+      const nh = ih * r;
+      const cx = (cw - nw) / 2;
+      const cy = (ch - nh) / 2;
+      ctx.drawImage(imgToDraw, cx, cy, nw, nh);
+
+      // Preload surrounding window to prepare for upcoming scrolls
+      preloadWindow(index);
     };
+
+    // Store reference to draw active frame for onload callback
+    drawActiveFrameRef.current = () => drawFrame(activeFrameRef.current);
 
     const resizeCanvas = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -90,6 +175,7 @@ export default function HeroParallax() {
         totalFrames - 1,
         Math.floor(progress * totalFrames)
       );
+      activeFrameRef.current = currentFrame;
       drawFrame(currentFrame);
     };
 
@@ -113,6 +199,7 @@ export default function HeroParallax() {
             totalFrames - 1,
             Math.floor(progress * totalFrames)
           );
+          activeFrameRef.current = targetFrame;
           drawFrame(targetFrame);
         },
       },
@@ -132,8 +219,9 @@ export default function HeroParallax() {
       window.removeEventListener("resize", resizeCanvas);
       const trigger = ScrollTrigger.getById("hero-scroll-trigger");
       if (trigger) trigger.kill();
+      drawActiveFrameRef.current = null;
     };
-  }, [isLoading]);
+  }, [isLoading, loadFrame, findNearestLoadedImage, preloadWindow]);
 
   return (
     <div
@@ -176,7 +264,7 @@ export default function HeroParallax() {
       >
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-agency-red animate-ping" />
+            <span className="w-2.5 h-2.5 rounded-full bg-agency-red animate-ping" />
             <span className="text-white/60">REC [●]</span>
           </div>
           <div>CAM A // Reflective_Production</div>
