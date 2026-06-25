@@ -43,6 +43,7 @@ export default function Navbar() {
             src="/assets/reflective_Media_Final_Logo_White_PNG.png"
             alt="Reflective Media Logo"
             fill
+            sizes="(max-width: 768px) 192px, 240px"
             className="object-contain"
             priority
           />

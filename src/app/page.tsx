@@ -15,8 +15,38 @@ const GlassBackground = dynamic(() => import("@/components/GlassBackground"), {
 });
 
 export default function Home() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Reflective Media",
+    "image": "https://reflectivemedia.agency/assets/reflective_Media_Final_Logo_White_PNG.png",
+    "@id": "https://reflectivemedia.agency/#organization",
+    "url": "https://reflectivemedia.agency",
+    "telephone": "+13235550199",
+    "priceRange": "$$$",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Studio 404, Carbon Blvd",
+      "addressLocality": "Los Angeles",
+      "addressRegion": "CA",
+      "postalCode": "90028",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 34.0928,
+      "longitude": -118.3287
+    }
+  };
+
   return (
     <main className="relative bg-agency-black w-full min-h-screen">
+      {/* Schema.org Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* 3D Morphing Glass Background Canvas */}
       <GlassBackground />
 

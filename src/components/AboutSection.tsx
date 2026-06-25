@@ -94,13 +94,13 @@ export default function AboutSection() {
 
         {/* Narrative Section */}
         <div className="max-w-4xl flex flex-col gap-6">
-          <h2
+          <h1
             ref={headingRef}
             className="font-heading font-extrabold text-3xl md:text-5xl lg:text-6xl leading-[1.15] tracking-tight text-left text-white text-balance"
           >
             Cinematic storytelling <br className="hidden md:inline" />
             meets <span className="text-agency-redGlow text-glow-accent">performance marketing.</span>
-          </h2>
+          </h1>
           <p
             ref={textRef}
             className="font-sans font-light text-base md:text-xl lg:text-2xl leading-relaxed text-left text-agency-textGrey/90 max-w-3xl mt-2 text-balance"

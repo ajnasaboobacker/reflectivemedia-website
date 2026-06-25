@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { Inter, Syne } from "next/font/google";
 import "./globals.css";
-import CustomCursor from "@/components/CustomCursor";
+import dynamic from "next/dynamic";
+
+const CustomCursor = dynamic(() => import("@/components/CustomCursor"), {
+  ssr: false,
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,15 +20,28 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://reflectivemedia.agency"),
   title: "Reflective Media | Digital Marketing & Video Production Agency",
   description: "Reflective Media is a premium video production and digital marketing agency. We shape cinematic narratives and engineer high-performance ad campaigns to scale your brand.",
   keywords: ["video production", "digital marketing", "media agency", "creative agency", "brand strategy", "performance marketing", "los angeles production"],
   authors: [{ name: "Reflective Media Team" }],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Reflective Media | Digital Marketing & Video Production Agency",
     description: "Reflective Media is a premium video production and digital marketing agency. We shape cinematic narratives and engineer high-performance ad campaigns to scale your brand.",
     type: "website",
     locale: "en_US",
+    siteName: "Reflective Media",
+    images: [
+      {
+        url: "/assets/reflective_Media_Final_Logo_White_PNG.png",
+        width: 1200,
+        height: 630,
+        alt: "Reflective Media Logo",
+      },
+    ],
   },
 };
 

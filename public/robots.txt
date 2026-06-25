@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://reflectivemedia.agency/sitemap.xml

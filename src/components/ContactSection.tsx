@@ -183,7 +183,7 @@ export default function ContactSection() {
 
         {/* Footer Row */}
         <div className="border-t border-white/5 pt-12 flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] font-mono uppercase tracking-[0.2em] text-agency-textGrey/60">
-          <div>© {new Date().getFullYear()} Reflective Media Agency. All Rights Reserved.</div>
+          <div suppressHydrationWarning>© {new Date().getFullYear()} Reflective Media Agency. All Rights Reserved.</div>
           <div className="flex items-center gap-8">
             <a href="#" className="hover:text-white transition-colors" data-cursor="pointer">Privacy</a>
             <a href="#" className="hover:text-white transition-colors" data-cursor="pointer">Terms</a>

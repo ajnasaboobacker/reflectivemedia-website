@@ -75,8 +75,14 @@ export default function HeroParallax() {
     };
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+
+      // Enable high-quality scaling algorithms on resize
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+
       // Get the scroll trigger instance and draw corresponding frame
       const trigger = ScrollTrigger.getById("hero-scroll-trigger");
       const progress = trigger ? trigger.progress : 0;
