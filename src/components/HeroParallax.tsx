@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FilmGrain, Vignette, AnimatedBackground, FilmGrainFilters } from "./Hyperframes";
 
 export default function HeroParallax() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,6 +13,12 @@ export default function HeroParallax() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [frame, setFrame] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   
   const totalFrames = 240;
   const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
@@ -104,19 +111,28 @@ export default function HeroParallax() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       if (isCancelled) return;
 
-      for (let i = 1; i <= totalFrames; i++) {
+      const batchSize = 6;
+      for (let i = 1; i <= totalFrames; i += batchSize) {
         if (isCancelled) break;
 
-        // Skip if already loaded or loading
-        if (imagesRef.current[i - 1]) continue;
+        const batch = [];
+        for (let j = 0; j < batchSize && (i + j) <= totalFrames; j++) {
+          const idx = i + j;
+          if (!imagesRef.current[idx - 1]) {
+            batch.push(
+              new Promise<void>((resolve) => {
+                const img = loadFrame(idx, () => {
+                  resolve();
+                });
+                img.onerror = () => resolve();
+              })
+            );
+          }
+        }
 
-        // Load the frame and wait for it to load before starting the next one
-        await new Promise<void>((resolve) => {
-          const img = loadFrame(i, () => {
-            resolve();
-          });
-          img.onerror = () => resolve();
-        });
+        if (batch.length > 0) {
+          await Promise.all(batch);
+        }
       }
     };
 
@@ -204,6 +220,7 @@ export default function HeroParallax() {
       );
       activeFrameRef.current = currentFrame;
       drawFrame(currentFrame);
+      setFrame(currentFrame);
     };
 
     // Set initial canvas dimension and render first frame
@@ -228,6 +245,7 @@ export default function HeroParallax() {
           );
           activeFrameRef.current = targetFrame;
           drawFrame(targetFrame);
+          setFrame(targetFrame);
         },
       },
     });
@@ -262,10 +280,10 @@ export default function HeroParallax() {
       canvas,
       {
         opacity: 0,
-        duration: 0.3, // ponytail: fades out over last 30% of scroll trigger (70% to 100%)
-        ease: "power1.inOut"
+        duration: 0.15, // fades out over last 15% of scroll trigger (85% to 100%)
+        ease: "power2.inOut"
       },
-      0.7
+      0.85
     );
 
     return () => {
@@ -279,8 +297,14 @@ export default function HeroParallax() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-screen overflow-hidden bg-agency-black select-none z-10"
+      className="relative w-full h-screen overflow-hidden bg-transparent select-none z-10"
     >
+      {/* Shared SVG filter definitions for film grain */}
+      {isMounted && <FilmGrainFilters />}
+
+      {/* Animated Background from toolkit */}
+      {isMounted && <AnimatedBackground frame={frame} variant="dark" showGrid={true} shapeCount={10} />}
+
       {/* Loading Overlay */}
       {isLoading && (
         <div className="absolute inset-0 bg-agency-black z-50 flex flex-col justify-center items-center font-mono text-xs uppercase tracking-[0.3em] text-white">
@@ -304,6 +328,10 @@ export default function HeroParallax() {
       <div className="absolute inset-0 bg-gradient-to-t from-agency-black via-transparent to-agency-black/50 z-30 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-r from-agency-black/40 via-transparent to-agency-black/40 z-30 pointer-events-none" />
 
+      {/* Toolkit Hyperframe Overlays */}
+      {isMounted && <FilmGrain frame={frame} opacity={0.15} />}
+      {isMounted && <Vignette intensity={0.75} centerSize={35} />}
+
       {/* Frame Canvas Player */}
       <canvas
         ref={canvasRef}
@@ -317,29 +345,33 @@ export default function HeroParallax() {
       >
         <div /> {/* Top spacer */}
         
-        {/* Main centered text block - removed max-w-7xl to let it span screen-wide, matching client mockup */}
-        <div className="flex flex-col items-start justify-center flex-grow w-full mt-12 md:mt-0">
-          {/* Apply skew individually to children so their left edges remain perfectly aligned */}
-          <h2 className="font-airstrike font-bold text-lg sm:text-2xl md:text-4xl tracking-widest uppercase mb-1 drop-shadow-lg text-white transform -skew-x-12 select-none whitespace-nowrap">
-            Grow Your
-          </h2>
-          <h1 className="font-airstrike font-black text-5xl sm:text-7xl md:text-[9rem] lg:text-[11rem] xl:text-[13rem] tracking-tighter leading-none uppercase drop-shadow-xl text-white transform -skew-x-12 select-none w-full whitespace-nowrap">
-            Business
-          </h1>
+        {/* Main centered text block - centered horizontally as a group with shared skew transform */}
+        <div className="flex flex-col items-center justify-center flex-grow w-full mt-12 md:mt-0">
+          <div className="flex flex-col items-start relative max-w-full transform -skew-x-12">
+            {/* GROW YOUR - Left-aligned to BUSINESS */}
+            <h2 className="font-airstrike font-bold text-lg sm:text-2xl md:text-4xl tracking-widest uppercase mb-1 drop-shadow-lg text-white select-none whitespace-nowrap">
+              Grow Your
+            </h2>
+            {/* BUSINESS */}
+            <h1 className="font-airstrike font-black text-5xl sm:text-7xl md:text-[9rem] lg:text-[11rem] xl:text-[13rem] tracking-tighter leading-none uppercase drop-shadow-xl text-white select-none whitespace-nowrap">
+              Business
+            </h1>
+            {/* WITH US - Right-aligned to BUSINESS */}
+            <div className="self-end mt-4 md:mt-8 font-airstrike text-xl sm:text-2xl md:text-4xl tracking-wider uppercase drop-shadow-md text-white">
+              With Us
+            </div>
+          </div>
         </div>
 
         {/* Bottom row - spans screen-wide to align with left/right edges */}
         <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-6 select-none">
           {/* Countries / Region List */}
-          <div className="flex items-center gap-3 font-airstrike text-[10px] sm:text-xs md:text-sm tracking-widest uppercase drop-shadow-md transform -skew-x-12">
+          <div className="flex items-center justify-start gap-3 font-airstrike text-[10px] sm:text-xs md:text-sm tracking-widest uppercase drop-shadow-md transform -skew-x-12">
             <span className="w-2 h-2 rounded-full bg-agency-red animate-pulse" />
             <span className="text-white/95">UAE &nbsp;|&nbsp; INDIA &nbsp;|&nbsp; KUWAIT</span>
           </div>
 
-          {/* WITH US */}
-          <div className="font-airstrike text-xl sm:text-2xl md:text-4xl tracking-wider uppercase drop-shadow-md transform -skew-x-12 text-white">
-            With Us
-          </div>
+          <div className="hidden md:block" />
         </div>
       </div>
 

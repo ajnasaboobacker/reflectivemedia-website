@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { 
@@ -28,6 +28,7 @@ const CORE_VALUES = [
 ];
 
 export default function AboutSection() {
+  const [isExpanded, setIsExpanded] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const textRef1 = useRef<HTMLParagraphElement>(null);
   const textRef2 = useRef<HTMLParagraphElement>(null);
@@ -123,44 +124,44 @@ export default function AboutSection() {
       stats.forEach((stat) => {
         const isLetterAnim = stat.getAttribute("data-target") === "A-Z";
         const suffix = stat.getAttribute("data-suffix") || "";
+        const statWithVal = stat as unknown as { _val: number };
         
         if (isLetterAnim) {
           const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          const obj = { val: 0 };
+          statWithVal._val = 0;
           gsap.fromTo(
-            obj,
-            { val: 0 },
+            stat,
+            { _val: 0 },
             {
-              val: 25,
-              duration: 2,
+              _val: 25,
+              duration: 2.5,
               ease: "power2.out",
               scrollTrigger: {
                 trigger: stat,
                 start: "top 85%",
               },
-              onUpdate: function () {
-                const progress = this.progress(); // 0 to 1
-                const index = Math.floor(progress * 25);
+              onUpdate: () => {
+                const index = Math.floor(statWithVal._val);
                 stat.innerHTML = chars[25 - index] + suffix;
               },
             }
           );
         } else {
           const targetVal = parseInt(stat.getAttribute("data-target") || "0", 10);
+          statWithVal._val = 0;
           gsap.fromTo(
             stat,
-            { textContent: "0" },
+            { _val: 0 },
             {
-              textContent: targetVal.toString(),
-              duration: 2,
+              _val: targetVal,
+              duration: 2.5,
               ease: "power2.out",
-              snap: { textContent: 1 },
               scrollTrigger: {
                 trigger: stat,
                 start: "top 85%",
               },
-              onUpdate: function () {
-                stat.innerHTML = this.targets()[0].textContent + suffix;
+              onUpdate: () => {
+                stat.innerHTML = Math.floor(statWithVal._val).toString() + suffix;
               },
             }
           );
@@ -173,7 +174,7 @@ export default function AboutSection() {
     <section
       id="about"
       ref={triggerRef}
-      className="relative min-h-screen py-24 md:py-36 px-6 md:px-12 flex flex-col justify-center items-center bg-transparent z-20"
+      className="relative min-h-screen pt-12 pb-24 md:pt-16 md:pb-36 px-6 md:px-12 flex flex-col justify-center items-center bg-transparent z-20"
     >
       <div className="max-w-6xl mx-auto w-full flex flex-col gap-16 md:gap-24">
         {/* Monospace Indicator */}
@@ -190,13 +191,36 @@ export default function AboutSection() {
           >
             Reflective <span className="text-agency-redGlow text-glow-accent">Media</span> Productions
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 text-agency-textGrey/90 font-sans font-light text-base md:text-lg leading-relaxed">
-            <p ref={textRef1}>
-              Reflective Media Productions LLC is a UAE based creative production and digital marketing company dedicated to bringing brands to life through compelling storytelling, innovative visuals, and strategic marketing.
-            </p>
-            <p ref={textRef2}>
-              We combine innovation, design, and data-driven insights to craft marketing solutions that engage audiences, strengthen brand presence, and deliver measurable business results. Our focus is on helping businesses transform their vision into a compelling digital identity that inspires trust, drives growth, and creates lasting impact.
-            </p>
+          <div className="flex flex-col gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 text-agency-textGrey/90 font-sans font-light text-base md:text-lg leading-relaxed">
+              <p ref={textRef1}>
+                Reflective Media Productions LLC is a UAE based creative production and digital marketing company dedicated to bringing brands to life through compelling storytelling, innovative visuals, and strategic marketing.
+              </p>
+              <p ref={textRef2}>
+                We combine innovation, design, and data-driven insights to craft marketing solutions that engage audiences, strengthen brand presence, and deliver measurable business results. Our focus is on helping businesses transform their vision into a compelling digital identity that inspires trust, drives growth, and creates lasting impact.
+              </p>
+            </div>
+            
+            <div className="flex flex-col items-start gap-4">
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="text-xs font-mono uppercase tracking-[0.2em] text-agency-redGlow hover:text-white transition-colors duration-300 flex items-center gap-2 mt-2"
+                data-cursor="pointer"
+              >
+                <span>{isExpanded ? "// Show Less" : "// Read Full Story"}</span>
+                <span className={`transform transition-transform duration-300 text-[10px] ${isExpanded ? "rotate-180" : ""}`}>▼</span>
+              </button>
+              
+              <div 
+                className={`transition-all duration-500 overflow-hidden font-sans font-light text-base md:text-lg text-agency-textGrey/80 leading-relaxed max-w-4xl ${
+                  isExpanded ? "max-h-[500px] opacity-100 mt-2" : "max-h-0 opacity-0 pointer-events-none"
+                }`}
+              >
+                <p>
+                  <strong>Reflective Media Productions LLC</strong> is a UAE-based creative production and digital marketing agency that specializes in cinematic video production, corporate storytelling, brand strategy, and performance-based marketing. Headquartered in Abu Dhabi, the company delivers end-to-end media services, including commercial film production, corporate video editing, graphic design, and data-driven ad campaigns. Reflective Media combines creative visual design with digital marketing insights to build cohesive digital identities that scale client visibility and drive measurable revenue growth across regional markets. By leveraging high-quality photography, structured advertising strategies, and modern web application development, the agency helps local and international brands transform their creative vision into a trusted, premium market presence.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -1,9 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Send, MapPin, Mail, Phone, Globe } from "lucide-react";
 
 export default function ContactSection() {
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const [activeCategory, setActiveCategory] = useState<string>("Media Production");
   const [formState, setFormState] = useState({
     name: "",
@@ -101,23 +107,119 @@ export default function ContactSection() {
             <div className="glassmorphism p-8 md:p-12 rounded-3xl border border-white/5 shadow-glass relative overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-red-glow-gradient opacity-10 pointer-events-none" />
 
-              {submitted ? (
-                <div className="flex flex-col items-center justify-center py-16 text-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-agency-red/10 border border-agency-red/30 flex items-center justify-center text-agency-redGlow animate-bounce">
-                    <Send size={24} />
+              {isMounted ? (
+                submitted ? (
+                  <div className="flex flex-col items-center justify-center py-16 text-center gap-4">
+                    <div className="w-16 h-16 rounded-full bg-agency-red/10 border border-agency-red/30 flex items-center justify-center text-agency-redGlow animate-bounce">
+                      <Send size={24} />
+                    </div>
+                    <h3 className="font-heading font-bold text-xl text-white">Transmission Sent!</h3>
+                    <p className="text-xs text-agency-textGrey font-mono tracking-widest uppercase">
+                      We will respond within 24 hours.
+                    </p>
                   </div>
-                  <h3 className="font-heading font-bold text-xl text-white">Transmission Sent!</h3>
-                  <p className="text-xs text-agency-textGrey font-mono tracking-widest uppercase">
-                    We will respond within 24 hours.
-                  </p>
-                </div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                    {/* Category Filter Capsules */}
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
+                        {"// Select Service"}
+                      </label>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {[
+                          "Media Production",
+                          "Branding & Design",
+                          "Digital Marketing",
+                          "Podcasting",
+                          "Web & App Dev",
+                          "Film Production",
+                        ].map((cat) => (
+                          <button
+                            key={cat}
+                            type="button"
+                            onClick={() => setActiveCategory(cat)}
+                            className={`px-3.5 py-1.5 rounded-full text-[10px] font-mono tracking-widest border transition-all duration-300 uppercase ${
+                              activeCategory === cat
+                                ? "bg-agency-red border-agency-red text-white shadow-red-glow"
+                                : "bg-white/5 border-white/5 text-white/60 hover:border-white/20"
+                            }`}
+                            data-cursor="pointer"
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Name Input */}
+                    <div className="flex flex-col gap-2 mt-2">
+                      <label className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
+                        {"// Your Name"}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        suppressHydrationWarning
+                        value={formState.name}
+                        onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                        placeholder="e.g. Director of Marketing"
+                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans"
+                        data-cursor="pointer"
+                      />
+                    </div>
+
+                    {/* Email Input */}
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
+                        {"// Your Email"}
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        suppressHydrationWarning
+                        value={formState.email}
+                        onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                        placeholder="e.g. director@company.com"
+                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans"
+                        data-cursor="pointer"
+                      />
+                    </div>
+
+                    {/* Message Input */}
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
+                        {"// Tell Us About Your Project"}
+                      </label>
+                      <textarea
+                        required
+                        suppressHydrationWarning
+                        rows={4}
+                        value={formState.message}
+                        onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                        placeholder="e.g. We want to shoot a corporate film..."
+                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans resize-none"
+                        data-cursor="pointer"
+                      />
+                    </div>
+
+                    {/* Submit Button */}
+                    <button
+                      type="submit"
+                      className="w-full mt-4 bg-agency-red hover:bg-agency-redGlow text-white font-mono tracking-widest text-xs uppercase py-4 rounded-2xl hover:shadow-red-glow border border-agency-red/10 transition-all duration-300 flex items-center justify-center gap-2"
+                      data-cursor="pointer"
+                    >
+                      <span>Send Inquiry</span>
+                      <Send size={12} />
+                    </button>
+                  </form>
+                )
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                  {/* Category Filter Capsules */}
+                <div className="form-skeleton flex flex-col gap-6 animate-pulse" aria-hidden="true" style={{ minHeight: '522px' }}>
+                  {/* Category Filter Capsules Placeholder */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
+                    <div className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
                       {"// Select Service"}
-                    </label>
+                    </div>
                     <div className="flex flex-wrap gap-2 mt-1">
                       {[
                         "Media Production",
@@ -127,81 +229,45 @@ export default function ContactSection() {
                         "Web & App Dev",
                         "Film Production",
                       ].map((cat) => (
-                        <button
+                        <div
                           key={cat}
-                          type="button"
-                          onClick={() => setActiveCategory(cat)}
-                          className={`px-3.5 py-1.5 rounded-full text-[10px] font-mono tracking-widest border transition-all duration-300 uppercase ${
-                            activeCategory === cat
-                              ? "bg-agency-red border-agency-red text-white shadow-red-glow"
-                              : "bg-white/5 border-white/5 text-white/60 hover:border-white/20"
-                          }`}
-                          data-cursor="pointer"
+                          className="px-3.5 py-1.5 rounded-full text-[10px] font-mono tracking-widest border bg-white/5 border-white/5 text-transparent select-none uppercase"
                         >
                           {cat}
-                        </button>
+                        </div>
                       ))}
                     </div>
                   </div>
 
-                  {/* Name Input */}
+                  {/* Name Input Placeholder */}
                   <div className="flex flex-col gap-2 mt-2">
-                    <label className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
+                    <div className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
                       {"// Your Name"}
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formState.name}
-                      onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                      placeholder="e.g. Director of Marketing"
-                      className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans"
-                      data-cursor="pointer"
-                    />
+                    </div>
+                    <div className="w-full bg-white/5 border border-white/5 rounded-2xl h-[54px]" />
                   </div>
 
-                  {/* Email Input */}
+                  {/* Email Input Placeholder */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
+                    <div className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
                       {"// Your Email"}
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={formState.email}
-                      onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                      placeholder="e.g. director@company.com"
-                      className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans"
-                      data-cursor="pointer"
-                    />
+                    </div>
+                    <div className="w-full bg-white/5 border border-white/5 rounded-2xl h-[54px]" />
                   </div>
 
-                  {/* Message Input */}
+                  {/* Message Input Placeholder */}
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
+                    <div className="text-[10px] font-mono tracking-widest uppercase text-agency-textGrey/70">
                       {"// Tell Us About Your Project"}
-                    </label>
-                    <textarea
-                      required
-                      rows={4}
-                      value={formState.message}
-                      onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                      placeholder="e.g. We want to shoot a corporate film..."
-                      className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans resize-none"
-                      data-cursor="pointer"
-                    />
+                    </div>
+                    <div className="w-full bg-white/5 border border-white/5 rounded-2xl h-[120px]" />
                   </div>
 
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    className="w-full mt-4 bg-agency-red hover:bg-agency-redGlow text-white font-mono tracking-widest text-xs uppercase py-4 rounded-2xl hover:shadow-red-glow border border-agency-red/10 transition-all duration-300 flex items-center justify-center gap-2"
-                    data-cursor="pointer"
-                  >
-                    <span>Send Inquiry</span>
-                    <Send size={12} />
-                  </button>
-                </form>
+                  {/* Submit Button Placeholder */}
+                  <div className="w-full mt-4 bg-agency-red/30 border border-agency-red/10 rounded-2xl h-[50px] flex items-center justify-center text-transparent font-mono text-[10px] tracking-widest uppercase py-4">
+                    Send Inquiry
+                  </div>
+                </div>
               )}
             </div>
           </div>

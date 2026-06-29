@@ -1,0 +1,17 @@
+# Reflective Media Productions
+
+> Reflective Media Productions LLC is a UAE-based creative production and digital marketing company delivering brand storytelling, cinematic production, and data-driven marketing.
+
+## Core Coordinates
+- **Headquarters:** Abu Dhabi, UAE
+- **Email:** info@reflectivemediaproductions.com
+- **Phone (UAE):** +971 56 764 8993 | +971 2 641 8616 (Abu Dhabi Office)
+- **Website:** https://www.reflectivemediaproductions.com
+
+## Core Capabilities
+- **Media Production:** Video production, brand campaigns, and creative content creation.
+- **Branding & Design:** Visual identity design and brand guidelines.
+- **Digital Marketing:** Performance campaigns, growth strategies, and analytics tracking.
+- **Podcasting:** Full-service podcast production and publishing.
+- **Web & App Development:** High-performance Next.js and client application development.
+- **Film Production:** Cinematic production, scriptwriting, post-production, and VFX.

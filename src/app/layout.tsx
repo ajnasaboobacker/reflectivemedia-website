@@ -20,7 +20,7 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://reflectivemedia.agency"),
+  metadataBase: new URL("https://www.reflectivemediaproductions.com"),
   title: "Reflective Media | Digital Marketing & Video Production Agency",
   description: "Reflective Media is a premium video production and digital marketing agency. We shape cinematic narratives and engineer high-performance ad campaigns to scale your brand.",
   keywords: ["video production", "digital marketing", "media agency", "creative agency", "brand strategy", "performance marketing", "los angeles production"],

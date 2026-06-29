@@ -3,9 +3,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,10 +24,12 @@ export default function Navbar() {
   }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (isHome) {
+      e.preventDefault();
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -51,50 +56,50 @@ export default function Navbar() {
 
         {/* Links */}
         <div className="hidden md:flex items-center gap-8 text-xs font-mono tracking-widest text-agency-textGrey/90">
-          <a
-            href="#about"
+          <Link
+            href={isHome ? "#about" : "/#about"}
             onClick={(e) => handleNavClick(e, "about")}
             className="hover:text-agency-redGlow transition-colors uppercase"
             data-cursor="pointer"
           >
             {"// Agency"}
-          </a>
-          <a
-            href="#services"
+          </Link>
+          <Link
+            href={isHome ? "#services" : "/#services"}
             onClick={(e) => handleNavClick(e, "services")}
             className="hover:text-agency-redGlow transition-colors uppercase"
             data-cursor="pointer"
           >
             {"// Services"}
-          </a>
-          <a
-            href="#work"
+          </Link>
+          <Link
+            href={isHome ? "#work" : "/#work"}
             onClick={(e) => handleNavClick(e, "work")}
             className="hover:text-agency-redGlow transition-colors uppercase"
             data-cursor="pointer"
           >
             {"// Work"}
-          </a>
-          <a
-            href="#contact"
+          </Link>
+          <Link
+            href={isHome ? "#contact" : "/#contact"}
             onClick={(e) => handleNavClick(e, "contact")}
             className="hover:text-agency-redGlow transition-colors uppercase"
             data-cursor="pointer"
           >
             {"// Connect"}
-          </a>
+          </Link>
         </div>
 
         {/* Action Button */}
         <div>
-          <a
-            href="#contact"
+          <Link
+            href={isHome ? "#contact" : "/#contact"}
             onClick={(e) => handleNavClick(e, "contact")}
             className="px-5 py-2 text-xs font-mono tracking-widest border border-white/10 rounded-full hover:bg-agency-red hover:border-agency-red hover:shadow-red-glow transition-all duration-300 glassmorphism uppercase text-white"
             data-cursor="pointer"
           >
             Let&apos;s talk
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

@@ -6,13 +6,14 @@ import HeroParallax from "@/components/HeroParallax";
 import AboutSection from "@/components/AboutSection";
 import ServicesSection from "@/components/ServicesSection";
 import WorkSection from "@/components/WorkSection";
-import ContactSection from "@/components/ContactSection";
 
-// Dynamically import GlassBackground with SSR disabled (Canvas relies on window/WebGL)
+// Dynamically import GlassBackground (Canvas relies on WebGL/window)
 const GlassBackground = dynamic(() => import("@/components/GlassBackground"), {
   ssr: false,
   loading: () => <div className="fixed inset-0 bg-agency-black z-0" />,
 });
+
+import ContactSection from "@/components/ContactSection";
 
 export default function Home() {
   const jsonLd = {
@@ -26,9 +27,20 @@ export default function Home() {
     "priceRange": "$$$",
     "address": {
       "@type": "PostalAddress",
+      "streetAddress": "Abu Dhabi Headquarters",
       "addressLocality": "Abu Dhabi",
+      "addressRegion": "Abu Dhabi",
       "addressCountry": "AE"
-    }
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "24.4539",
+      "longitude": "54.3773"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/company/reflectivemedia",
+      "https://www.youtube.com/@reflectivemedia"
+    ]
   };
 
   return (

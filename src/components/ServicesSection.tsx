@@ -4,12 +4,14 @@ import { useRef, useEffect } from "react";
 import { Camera, Palette, TrendingUp, Mic, Target, Sparkles, Code, Film } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Link from "next/link";
 
 const SERVICES_DATA = [
   {
     num: "01",
     icon: Camera,
     title: "Media Production",
+    slug: "media-production",
     desc: "High quality video production, photography, and creative content designed to capture attention, communicate your message, and strengthen your brand presence.",
     features: ["Commercials", "Photography", "Creative Content", "Social Assets"],
   },
@@ -17,6 +19,7 @@ const SERVICES_DATA = [
     num: "02",
     icon: Palette,
     title: "Branding & Design",
+    slug: "branding-design",
     desc: "Building distinctive brand identities through strategic design, visual consistency, and creative solutions that leave a lasting impression.",
     features: ["Brand Identity", "Visual Systems", "Logo Overhaul", "Collateral"],
   },
@@ -24,6 +27,7 @@ const SERVICES_DATA = [
     num: "03",
     icon: TrendingUp,
     title: "Digital Marketing",
+    slug: "digital-marketing",
     desc: "Data driven marketing strategies focused on increasing visibility, audience engagement, lead generation, and business growth.",
     features: ["SEO / SEM", "Lead Generation", "Growth Ads", "Engagement"],
   },
@@ -31,6 +35,7 @@ const SERVICES_DATA = [
     num: "04",
     icon: Mic,
     title: "Podcasting",
+    slug: "podcasting",
     desc: "End to end podcast production services, from concept development and recording to editing, publishing, and distribution.",
     features: ["Audio Concepting", "Multi-Mic Recording", "Distribution", "Audio SEO"],
   },
@@ -38,6 +43,7 @@ const SERVICES_DATA = [
     num: "05",
     icon: Target,
     title: "Advertising & Strategy",
+    slug: "advertising-strategy",
     desc: "Strategic campaign planning and execution designed to reach the right audience, maximize impact, and deliver measurable results.",
     features: ["Campaign Planning", "Target Optimization", "Copywriting", "Analytics"],
   },
@@ -45,6 +51,7 @@ const SERVICES_DATA = [
     num: "06",
     icon: Sparkles,
     title: "AI Video Production",
+    slug: "ai-video-production",
     desc: "AI powered video solutions that enable fast, scalable, and engaging content creation for modern digital platforms.",
     features: ["Fast Scale", "AI Video Tech", "Modern Templates", "Automation"],
   },
@@ -52,6 +59,7 @@ const SERVICES_DATA = [
     num: "07",
     icon: Code,
     title: "Web & App Development",
+    slug: "web-app-development",
     desc: "Designing and developing high performance websites and mobile applications with seamless user experiences and robust functionality.",
     features: ["High-Perf Websites", "UX/UI Architecture", "Mobile Apps", "Custom Web"],
   },
@@ -59,6 +67,7 @@ const SERVICES_DATA = [
     num: "08",
     icon: Film,
     title: "Film Production",
+    slug: "film-production",
     desc: "Professional film production services, including concept development, scriptwriting, cinematic production, post-production, VFX, sound design, and final delivery.",
     features: ["Scriptwriting", "Cinematography", "VFX & Sound", "Final Delivery"],
   },
@@ -121,8 +130,9 @@ export default function ServicesSection() {
           {SERVICES_DATA.map((service, index) => {
             const IconComponent = service.icon;
             return (
-              <div
+              <Link
                 key={index}
+                href={`/services/${service.slug}`}
                 className="service-card glassmorphism glassmorphism-hover p-8 rounded-3xl flex flex-col justify-between gap-8 border border-white/5 shadow-glass relative overflow-hidden group"
                 data-cursor="pointer"
               >
@@ -162,7 +172,7 @@ export default function ServicesSection() {
                     </span>
                   ))}
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
