@@ -70,11 +70,8 @@ export default function ContactSection() {
                   <Phone size={14} />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <a href="tel:+971567648993" className="hover:text-white transition-colors" data-cursor="pointer">
-                    +971 56 764 8993
-                  </a>
-                  <a href="tel:+97126418616" className="hover:text-white transition-colors" data-cursor="pointer">
-                    +971 2 641 8616 (AD)
+                  <a href="tel:+971566884693" className="hover:text-white transition-colors" data-cursor="pointer">
+                    +971 56 688 4693
                   </a>
                 </div>
               </div>

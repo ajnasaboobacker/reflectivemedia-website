@@ -23,7 +23,7 @@ export default function Home() {
     "image": "https://www.reflectivemediaproductions.com/assets/reflective_Media_Final_Logo_White_PNG.png",
     "@id": "https://www.reflectivemediaproductions.com/#organization",
     "url": "https://www.reflectivemediaproductions.com",
-    "telephone": "+971567648993",
+    "telephone": "+971566884693",
     "priceRange": "$$$",
     "address": {
       "@type": "PostalAddress",
