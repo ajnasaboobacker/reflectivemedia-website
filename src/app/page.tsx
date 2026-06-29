@@ -44,7 +44,7 @@ export default function Home() {
   };
 
   return (
-    <main className="relative bg-agency-black w-full min-h-screen">
+    <main className="relative bg-agency-black w-full min-h-screen overflow-x-hidden">
       {/* Schema.org Structured Data */}
       <script
         type="application/ld+json"
@@ -58,7 +58,7 @@ export default function Home() {
       <Navbar />
 
       {/* Main Agency Sections */}
-      <div className="relative z-10 w-full">
+      <div className="relative z-10 w-full overflow-x-hidden">
         {/* Section 1: Hero Zoom Parallax Portal */}
         <HeroParallax />
 

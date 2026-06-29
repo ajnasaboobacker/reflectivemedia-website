@@ -349,15 +349,15 @@ export default function HeroParallax() {
         <div className="flex flex-col items-center justify-center flex-grow w-full mt-12 md:mt-0">
           <div className="flex flex-col items-start relative max-w-full transform -skew-x-12">
             {/* GROW YOUR - Left-aligned to BUSINESS */}
-            <h2 className="font-airstrike font-bold text-lg sm:text-2xl md:text-4xl tracking-widest uppercase mb-1 drop-shadow-lg text-white select-none whitespace-nowrap">
+            <h2 className="font-airstrike font-bold text-[4.5vw] sm:text-2xl md:text-4xl tracking-widest uppercase mb-1 drop-shadow-lg text-white select-none whitespace-nowrap">
               Grow Your
             </h2>
             {/* BUSINESS */}
-            <h1 className="font-airstrike font-black text-5xl sm:text-7xl md:text-[9rem] lg:text-[11rem] xl:text-[13rem] tracking-tighter leading-none uppercase drop-shadow-xl text-white select-none whitespace-nowrap">
+            <h1 className="font-airstrike font-black text-[12vw] sm:text-7xl md:text-[9rem] lg:text-[11rem] xl:text-[13rem] tracking-tighter leading-none uppercase drop-shadow-xl text-white select-none whitespace-nowrap">
               Business
             </h1>
             {/* WITH US - Right-aligned to BUSINESS */}
-            <div className="self-end mt-4 md:mt-8 font-airstrike text-xl sm:text-2xl md:text-4xl tracking-wider uppercase drop-shadow-md text-white">
+            <div className="self-end mt-4 md:mt-8 font-airstrike text-[5vw] sm:text-2xl md:text-4xl tracking-wider uppercase drop-shadow-md text-white">
               With Us
             </div>
           </div>
@@ -385,10 +385,16 @@ export default function HeroParallax() {
             <span className="w-2.5 h-2.5 rounded-full bg-agency-red animate-ping" />
             <span className="text-white/60">REC [●]</span>
           </div>
-          <div>CAM A // Reflective_Production</div>
+          <div>
+            <span className="hidden sm:inline">CAM A // Reflective_Production</span>
+            <span className="sm:hidden">CAM A</span>
+          </div>
         </div>
         <div className="flex justify-between items-end">
-          <div>24 FPS // shutter 1/50</div>
+          <div>
+            <span className="hidden sm:inline">24 FPS // shutter 1/50</span>
+            <span className="sm:hidden">24 FPS</span>
+          </div>
           <div>ISO 400</div>
         </div>
       </div>

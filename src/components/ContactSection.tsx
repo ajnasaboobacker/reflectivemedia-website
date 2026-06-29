@@ -160,7 +160,7 @@ export default function ContactSection() {
                         value={formState.name}
                         onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                         placeholder="e.g. Director of Marketing"
-                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans"
+                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-base md:text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans"
                         data-cursor="pointer"
                       />
                     </div>
@@ -177,7 +177,7 @@ export default function ContactSection() {
                         value={formState.email}
                         onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                         placeholder="e.g. director@company.com"
-                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans"
+                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-base md:text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans"
                         data-cursor="pointer"
                       />
                     </div>
@@ -194,7 +194,7 @@ export default function ContactSection() {
                         value={formState.message}
                         onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                         placeholder="e.g. We want to shoot a corporate film..."
-                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans resize-none"
+                        className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-4 text-base md:text-sm text-white placeholder-white/20 focus:outline-none focus:border-agency-red/40 focus:ring-1 focus:ring-agency-red/20 focus:bg-white/[0.07] transition-all duration-300 font-sans resize-none"
                         data-cursor="pointer"
                       />
                     </div>
