@@ -3,6 +3,8 @@ import { Inter, Syne } from "next/font/google";
 import "./globals.css";
 import dynamic from "next/dynamic";
 
+import Script from "next/script";
+
 const CustomCursor = dynamic(() => import("@/components/CustomCursor"), {
   ssr: false,
 });
@@ -57,6 +59,19 @@ export default function RootLayout({
       >
         <CustomCursor />
         {children}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-FNE535CGPS"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-FNE535CGPS');
+          `}
+        </Script>
       </body>
     </html>
   );
