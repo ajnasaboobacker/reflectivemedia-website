@@ -3,8 +3,6 @@ import { Inter, Syne } from "next/font/google";
 import "./globals.css";
 import dynamic from "next/dynamic";
 
-import Script from "next/script";
-
 const CustomCursor = dynamic(() => import("@/components/CustomCursor"), {
   ssr: false,
 });
@@ -54,24 +52,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-FNE535CGPS"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-FNE535CGPS');
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${inter.variable} ${syne.variable} antialiased bg-agency-black text-foreground overflow-x-hidden`}
       >
         <CustomCursor />
         {children}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-FNE535CGPS"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-FNE535CGPS');
-          `}
-        </Script>
       </body>
     </html>
   );
